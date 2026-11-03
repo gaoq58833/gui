@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gui</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+    <script type="module" src="/src/main.ts" defer></script>
+  </head>
+
+  <body>
+    <div class="stage">
+      <svg class="dial" viewBox="0 0 360 360" role="img" aria-label="日晷挂件盘面">
+        <defs>
+          <radialGradient id="stone-face" cx="36%" cy="30%" r="80%">
+            <stop offset="0%" stop-color="#7f8783" />
+            <stop offset="55%" stop-color="#656d69" />
+            <stop offset="100%" stop-color="#4a524f" />
+          </radialGradient>
+        </defs>
+
+        <circle
+          cx="180"
+          cy="180"
+          r="132"
+          fill="url(#stone-face)"
+          stroke="rgba(255, 255, 255, 0.18)"
+          stroke-width="1"
+        />
+        <circle
+          cx="180"
+          cy="180"
+          r="120"
+          fill="none"
+          stroke="rgba(255, 255, 255, 0.1)"
+          stroke-width="1"
+        />
+
+        <g id="ticks"></g>
+
+        <line class="shadow" x1="180" y1="180" x2="180" y2="76" />
+        <circle class="pin" cx="180" cy="180" r="4" />
+      </svg>
+    </div>
+  </body>
+</html>

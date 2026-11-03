@@ -1,0 +1,59 @@
+:root {
+  --stone-light: #7f8783;
+  --stone: #656d69;
+  --stone-dark: #4a524f;
+  --rim: rgba(255, 255, 255, 0.18);
+  --ink: #edeae4;
+  --shadow: #14110d;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+.stage {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.dial {
+  width: 100%;
+  height: 100%;
+  display: block;
+  /* 指针事件留给 .stage，否则拖不动窗口 */
+  pointer-events: none;
+}
+
+.tick {
+  stroke: rgba(237, 234, 228, 0.34);
+}
+
+.tick-major {
+  stroke-width: 1.6;
+}
+
+.tick-minor {
+  stroke-width: 1;
+}
+
+.shadow {
+  stroke: var(--shadow);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0.62;
+}
+
+.pin {
+  fill: var(--ink);
+}
