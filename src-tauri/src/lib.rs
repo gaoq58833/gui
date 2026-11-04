@@ -58,6 +58,13 @@ pub fn run() {
                 })
                 .build(app)?;
 
+            // 启动时强制让窗口可见并居中：
+            // window-state 插件可能从上次关闭时的 visible=false 恢复
+            if let Some(window) = app.get_webview_window("main") {
+                let _ = window.show();
+                let _ = window.center();
+            }
+
             // 开机自启：只对正式构建生效，避免开发调试时把临时程序写进启动项
             #[cfg(not(debug_assertions))]
             {

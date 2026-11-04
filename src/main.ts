@@ -1,7 +1,7 @@
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import {
   buildDialStatic,
-  formatHour,
+  formatShichen,
   updateShadow,
   DEFAULT_LOCATION,
   type DialState,
@@ -44,7 +44,7 @@ function logState(s: DialState): void {
   // 开发时在控制台看数据，release 可以关掉
   if (import.meta.env.DEV) {
     console.debug(
-      `真太阳时 ${formatHour(s.trueSolarHour)} | ` +
+      `时辰 ${formatShichen(s.trueSolarHour)} | ` +
       `δ=${s.declination.toFixed(2)}° | ` +
       `EoT=${s.eqOfTime.toFixed(1)}min | ` +
       `盘面=${s.upperDisk ? "上" : "下"} | ` +
