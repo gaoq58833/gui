@@ -19,10 +19,8 @@ fn toggle_visible<R: Runtime>(app: &tauri::AppHandle<R>) {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_window_state::Builder::default().build())
-        .plugin(tauri_plugin_autostart::init(
-            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
-            None,
-        ))
+        // autostart 插件在 release 构建会导致进程启动即崩溃，
+        // 暂时手动写入 HKCU\Software\Microsoft\Windows\CurrentVersion\Run 替代
         .setup(|app| {
             let toggle = MenuItem::with_id(app, "toggle", "显示 / 隐藏", true, None::<&str>)?;
             let ontop = MenuItem::with_id(app, "ontop", "切换置顶", true, None::<&str>)?;
@@ -58,18 +56,27 @@ pub fn run() {
                 })
                 .build(app)?;
 
-            // 启动时强制让窗口可见并居中：
-            // window-state 插件可能从上次关闭时的 visible=false 恢复
+            // 启动时强制让窗口可见并居中（window-state 可能恢复 visible=false）
             if let Some(window) = app.get_webview_window("main") {
                 let _ = window.show();
                 let _ = window.center();
             }
 
-            // 开机自启：只对正式构建生效，避免开发调试时把临时程序写进启动项
+            // 开机自启：release 模式直接写注册表 Run 键
             #[cfg(not(debug_assertions))]
             {
-                use tauri_plugin_autostart::ManagerExt as _;
-                let _ = app.autolaunch().enable();
+                let exe_path = std::env::current_exe()
+                    .unwrap_or_default()
+                    .to_string_lossy()
+                    .to_string();
+                let _ = std::process::Command::new("powershell")
+                    .arg("-NoProfile")
+                    .arg("-Command")
+                    .arg(format!(
+                        "Set-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Run' -Name 'gui' -Value '{}'",
+                        exe_path.replace("'", "''")
+                    ))
+                    .spawn();
             }
 
             Ok(())
